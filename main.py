@@ -407,6 +407,11 @@ async def add_status_reward(user_id: int):
 
         now = datetime.now(timezone.utc)
 
+        def ensure_utc(dt: datetime) -> datetime:
+            if dt.tzinfo is None:
+                return dt.replace(tzinfo=timezone.utc)
+            return dt.astimezone(timezone.utc)
+
         if not row:
 
             await conn.execute(
@@ -436,10 +441,10 @@ async def add_status_reward(user_id: int):
             week_coins = row["week_coins"]
             total_coins = row["total_coins"]
 
-            last_hour_reset = row["last_hour_reset"]
-            last_day_reset = row["last_day_reset"]
-            last_week_reset = row["last_week_reset"]
-            last_claim = row["last_claim"]
+            last_hour_reset = ensure_utc(row["last_hour_reset"])
+            last_day_reset = ensure_utc(row["last_day_reset"])
+            last_week_reset = ensure_utc(row["last_week_reset"])
+            last_claim = ensure_utc(row["last_claim"])
 
             if now - last_claim < timedelta(seconds=STATUS_INTERVAL):
                 return
