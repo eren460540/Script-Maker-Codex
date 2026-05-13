@@ -936,17 +936,17 @@ async def status_info(ctx):
         return
 
     embed = discord.Embed(
-        title="💜 Status Rewards",
+        title="<a:global:1504083730980143204> Status Rewards",
         color=0x7B14BB
     )
 
     embed.description = (
-        "# Earn Free Coins\n\n"
-        "Add this to your Discord status:\n\n"
+        "# <a:gift:1504084446683336826> Earn Free Coins\n\n"
+        "<a:discord:1504084265414033408> Add this to your Discord status:\n\n"
         f"```{STATUS_REWARD_TEXT}```\n\n"
-        f"> Earn `{STATUS_REWARD}` coins every `{STATUS_INTERVAL}` seconds while online.\n"
-        "> Use `/status` to check earnings.\n"
-        "> Run `/status` anytime to see your hourly, daily, weekly, and total free status earnings.\n"
+        f"> <a:money:1504084340248936572> Earn `{STATUS_REWARD}` coins every `{STATUS_INTERVAL}` seconds while online.\n"
+        "> <a:question:1504084305067114629> Use `/status` to check earnings.\n"
+        "> <a:tickmark:1504083668606648422> Run `/status` anytime to see your hourly, daily, weekly, and total free status earnings.\n"
     )
 
     embed.set_image(
@@ -965,43 +965,36 @@ async def purchase(ctx):
         return
 
     embed = discord.Embed(
-        title="💜 Coins System",
+        title="<a:purchase:1504084364420452352> Coins System",
         color=0x7B14BB
     )
 
     embed.description = (
         "# <:cash:1499803753396703252> Coins System\n\n"
 
-        "## <:Roblox:1499818898688704553> How to Use\n\n"
+        "## <a:book:1504084400433008720> How to Use\n\n"
 
-        "### /create_script\n"
-        "> Cost: 3 Coins\n"
-        "> Generates a complete script from scratch. When using this command, please ensure you explain every detail, including specific features, intended usage, UI preferences, and coding style.\n\n"
+        "### <a:computer:1504084284435202098> /create_script\n"
+        "> <a:moneyman:1504084503172350084> Cost: 3 Coins\n"
+        "> <a:tickmark:1504083668606648422> Generates a complete script from scratch. When using this command, please ensure you explain every detail, including specific features, intended usage, UI preferences, and coding style.\n\n"
 
-        "### /edit_script\n"
-        "> Cost: 1 Coin\n"
-        "> Use this to edit existing code, fix bugs, add/remove features, or refine existing sources.\n\n"
+        "### <a:computer:1504084284435202098> /edit_script\n"
+        "> <a:moneyman:1504084503172350084> Cost: 1 Coin\n"
+        "> <a:tickmark:1504083668606648422> Use this to edit existing code, fix bugs, add/remove features, or refine existing sources.\n\n"
 
-        "## <:BrainRot:1499819229900308550> Double Check Mode\n\n"
-
-        "> Cost: Double the usual cost (Create: 6 Coins | Edit: 2 Coins)\n"
-        "> Enable the double_check toggle to have the AI perform a multi-pass review.\n"
-        "> Depending on your prompt, this mode is 3x–10x more accurate and efficient.\n"
-        "> It will scan for bugs, logic errors, and missing features before delivery to ensure your script is flawless and high-quality.\n\n"
-
-        "## Pricing (per 20 Coins)\n\n"
+        "## <a:money:1504084340248936572> Pricing (per 20 Coins)\n\n"
 
         "<:Paypal:1499819080037957653> PayPal: 5€\n"
         "<:Roblox:1499818898688704553> Robux: 715 R$\n"
         "<:BrainRot:1499819229900308550> <:gram:1499827233462947860> Other: Equal Value\n\n"
 
-        "## <:emoji_22:1504083784033763428> Information\n\n"
+        "## <:notification:1504083713548357732> Information\n\n"
 
-        "> Privacy Guaranteed: Once you purchase coins, you will be granted access to a private channel to run your commands.\n"
-        "> This ensures your custom code and scripts remain confidential.\n\n"
+        "> <a:discordv2:1504084489683341353> Privacy Guaranteed: Once you purchase coins, you will be granted access to a private channel to run your commands.\n"
+        "> <a:question:1504084305067114629> This ensures your custom code and scripts remain confidential.\n\n"
 
-        "## <a:ticket:1504084476362352640> Ready to buy?\n"
-        "> Scroll up to open a ticket!"
+        "## <a:waves:1504084476198916206> Ready to buy?\n"
+        "> <a:arrow:1504084325006708776> Scroll up to open a ticket!"
     )
 
     embed.set_image(
