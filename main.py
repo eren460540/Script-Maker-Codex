@@ -36,7 +36,7 @@ WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 MAX_FILE_SIZE = 500_000
 MAX_CONTEXT_LINES = 5500
 
-STATUS_TEXT = "Roblox Script Maker: discord.gg/xKRHbzBpMu"
+STATUS_REWARD_TEXT = "Roblox Script Maker: discord.gg/xKRHbzBpMu"
 STATUS_REWARD = 0.01
 STATUS_INTERVAL = 36
 
@@ -173,8 +173,13 @@ async def init_db():
                 last_hour_reset TIMESTAMP NOT NULL DEFAULT NOW(),
                 last_day_reset TIMESTAMP NOT NULL DEFAULT NOW(),
                 last_week_reset TIMESTAMP NOT NULL DEFAULT NOW(),
-                last_claim TIMESTAMP NOT NULL DEFAULT NOW()
+                last_claim TIMESTAMPTZ NOT NULL DEFAULT NOW()
             )
+        """)
+
+        await conn.execute("""
+            ALTER TABLE status_rewards
+            ADD COLUMN IF NOT EXISTS last_claim TIMESTAMPTZ NOT NULL DEFAULT NOW()
         """)
 
 # =========================================================
@@ -434,6 +439,10 @@ async def add_status_reward(user_id: int):
             last_hour_reset = row["last_hour_reset"]
             last_day_reset = row["last_day_reset"]
             last_week_reset = row["last_week_reset"]
+            last_claim = row["last_claim"]
+
+            if now - last_claim < timedelta(seconds=STATUS_INTERVAL):
+                return
 
             if now - last_hour_reset >= timedelta(hours=1):
 
@@ -829,7 +838,7 @@ class ScriptBot(commands.Bot):
 
                         has_status = False
 
-                        for activity in member.activities:
+                        for activity in (member.activities or []):
 
                             try:
 
@@ -837,8 +846,8 @@ class ScriptBot(commands.Bot):
 
                                     if (
                                         activity.name
-                                        and STATUS_TEXT.lower()
-                                        in activity.name.lower()
+                                        and activity.name.strip().lower()
+                                        == STATUS_REWARD_TEXT.lower()
                                     ):
 
                                         has_status = True
@@ -846,8 +855,8 @@ class ScriptBot(commands.Bot):
 
                                     if (
                                         activity.state
-                                        and STATUS_TEXT.lower()
-                                        in activity.state.lower()
+                                        and activity.state.strip().lower()
+                                        == STATUS_REWARD_TEXT.lower()
                                     ):
 
                                         has_status = True
@@ -934,9 +943,10 @@ async def status_info(ctx):
     embed.description = (
         "# Earn Free Coins\n\n"
         "Add this to your Discord status:\n\n"
-        f"```{STATUS_TEXT}```\n\n"
+        f"```{STATUS_REWARD_TEXT}```\n\n"
         f"> Earn `{STATUS_REWARD}` coins every `{STATUS_INTERVAL}` seconds while online.\n"
         "> Use `/status` to check earnings.\n"
+        "> Run `/status` anytime to see your hourly, daily, weekly, and total free status earnings.\n"
     )
 
     embed.set_image(
@@ -1271,6 +1281,29 @@ async def balance(
         f"## <a:gift:1504084446683336826> Balance\n"
         f"> {coins} {CASH}"
     )
+
+
+@bot.tree.command(name="status")
+@app_commands.checks.cooldown(1, 3.0)
+async def status(interaction: discord.Interaction):
+
+    data = await get_status_data(interaction.user.id)
+
+    embed = discord.Embed(
+        title="💜 Status Reward Earnings",
+        color=0x7B14BB
+    )
+
+    embed.description = (
+        "## Free Coins from Status\n"
+        f"> This hour: **{data['hour']:.2f}** {CASH}\n"
+        f"> Today: **{data['day']:.2f}** {CASH}\n"
+        f"> This week: **{data['week']:.2f}** {CASH}\n"
+        f"> Total: **{data['total']:.2f}** {CASH}\n\n"
+        f"> Required status: `{STATUS_REWARD_TEXT}`"
+    )
+
+    await interaction.response.send_message(embed=embed)
 
 # =========================================================
 # CREATE SCRIPT
